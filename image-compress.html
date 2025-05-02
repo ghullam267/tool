@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Free online image compression tool to optimize images with adjustable compression levels for faster web performance.">
+    <meta name="keywords" content="image compression, optimize images, image compressor, web performance, SEO image tool">
+    <meta name="author" content="Image Compression Tool">
+    <meta name="robots" content="index, follow">
+    <title>Image Compression Tool - Optimize Images Online</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="favicon.png">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google AdSense Script -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
+            crossorigin="anonymous"></script>
+    <style>
+        /* Custom styles for enhanced UI and responsiveness */
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .ad-container {
+            margin: 20px auto;
+            text-align: center;
+            max-width: 100%;
+        }
+        @media (max-width: 640px) {
+            .ad-container ins {
+                width: 100% !important;
+                height: auto !important;
+            }
+        }
+        /* Responsive images */
+        .preview-img {
+            max-width: 100%;
+            height: auto;
+            object-fit: contain;
+            transition: transform 0.3s ease;
+        }
+        .preview-img:hover {
+            transform: scale(1.02);
+        }
+        /* Custom range slider */
+        input[type="range"] {
+            -webkit-appearance: none;
+            appearance: none;
+            background: #e5e7eb;
+            height: 8px;
+            border-radius: 5px;
+            outline: none;
+            transition: background 0.3s;
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            background: #3b82f6;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        input[type="range"]::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            background: #3b82f6;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        input[type="range"]:hover {
+            background: #d1d5db;
+        }
+        input[type="range"]::-webkit-slider-thumb:hover {
+            background: #2563eb;
+        }
+        /* Loading animation */
+        .loading::after {
+            content: '';
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #ffffff;
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 1s linear infinite;
+            margin-left: 10px;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        /* Smooth transitions for sections */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+        .fade-in.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen flex flex-col">
+    <!-- Header -->
+    <header class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-8 shadow-lg">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <h1 class="text-4xl font-bold tracking-tight">Image Compression Tool</h1>
+            <p class="mt-3 text-lg opacity-90">Optimize your images effortlessly for faster websites and better SEO</p>
+        </div>
+    </header>
+
+    <!-- Ad Space: Top Banner -->
+    <div class="ad-container max-w-4xl mx-auto">
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+             data-ad-slot="YOUR_AD_SLOT_ID"
+             data-ad-format="auto"
+             data-full-width-responsive="true"></ins>
+        <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+    </div>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-12 flex-grow">
+        <section class="bg-white p-8 rounded-xl shadow-lg max-w-3xl mx-auto">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6">Compress Your Image</h2>
+            <div class="mb-6">
+                <label for="imageInput" class="block text-sm font-medium text-gray-700 mb-2">Select Image</label>
+                <input type="file" id="imageInput" accept="image/*" class="block w-full text-sm text-gray-500
+                    file:mr-4 file:py-3 file:px-5 file:rounded-lg file:border-0
+                    file:text-sm file:font-semibold file:bg-blue-600 file:text-white
+                    hover:file:bg-blue-700 transition cursor-pointer">
+            </div>
+            <div class="mb-6">
+                <label for="compressionLevel" class="block text-sm font-medium text-gray-700 mb-2">Compression Level</label>
+                <input type="range" id="compressionLevel" min="10" max="100" value="80" class="w-full">
+                <div class="flex justify-between text-sm text-gray-600 mt-3">
+                    <span>High Compression</span>
+                    <span id="compressionValue" class="font-medium text-blue-600">80%</span>
+                    <span>High Quality</span>
+                </div>
+            </div>
+            <button id="compressButton" class="w-full bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed" disabled>Compress Image</button>
+        </section>
+
+        <!-- Preview and Download Section -->
+        <section id="resultSection" class="mt-12 hidden fade-in">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6 text-center">Compression Result</h2>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-5xl mx-auto">
+                <div class="bg-white p-6 rounded-xl shadow-lg">
+                    <h3 class="text-lg font-medium text-gray-800 mb-3">Original Image</h3>
+                    <img id="originalPreview" alt="Original Image" class="preview-img rounded-lg">
+                    <p id="originalSize" class="mt-3 text-sm text-gray-600"></p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-lg">
+                    <h3 class="text-lg font-medium text-gray-800 mb-3">Compressed Image</h3>
+                    <img id="compressedPreview" alt="Compressed Image" class="preview-img rounded-lg">
+                    <p id="compressedSize" class="mt-3 text-sm text-gray-600"></p>
+                    <a id="downloadLink" href="#" download="compressed_image.jpg" class="mt-4 inline-block w-full text-center bg-green-600 text-white py-3 px-6 rounded-lg hover:bg-green-700 transition">Download Compressed Image</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Ad Space: Bottom Banner -->
+    <div class="ad-container max-w-4xl mx-auto">
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+             data-ad-slot="YOUR_AD_SLOT_ID"
+             data-ad-format="auto"
+             data-full-width-responsive="true"></ins>
+        <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-8 mt-auto">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <p class="text-sm">© 2025 Image Compression Tool. All rights reserved.</p>
+            <div class="mt-3 space-x-4">
+                <a href="/privacy" class="text-sm underline hover:text-blue-300 transition">Privacy Policy</a>
+                <a href="/terms" class="text-sm underline hover:text-blue-300 transition">Terms of Service</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript for Functionality -->
+    <script>
+        const imageInput = document.getElementById('imageInput');
+        const compressionLevel = document.getElementById('compressionLevel');
+        const compressionValue = document.getElementById('compressionValue');
+        const compressButton = document.getElementById('compressButton');
+        const resultSection = document.getElementById('resultSection');
+        const originalPreview = document.getElementById('originalPreview');
+        const compressedPreview = document.getElementById('compressedPreview');
+        const originalSize = document.getElementById('originalSize');
+        const compressedSize = document.getElementById('compressedSize');
+        const downloadLink = document.getElementById('downloadLink');
+
+        // Update compression level display
+        compressionLevel.addEventListener('input', () => {
+            compressionValue.textContent = `${compressionLevel.value}%`;
+        });
+
+        // Enable compress button when image is selected
+        imageInput.addEventListener('change', () => {
+            compressButton.disabled = !imageInput.files.length;
+        });
+
+        // Compress image
+        compressButton.addEventListener('click', async () => {
+            if (!imageInput.files[0]) return;
+
+            compressButton.disabled = true;
+            compressButton.textContent = 'Compressing...';
+            compressButton.classList.add('loading');
+
+            const file = imageInput.files[0];
+            const quality = compressionLevel.value / 100;
+
+            // Display original image
+            const originalUrl = URL.createObjectURL(file);
+            originalPreview.src = originalUrl;
+            originalSize.textContent = `Size: ${(file.size / 1024).toFixed(2)} KB`;
+
+            // Create canvas for compression
+            const img = new Image();
+            img.src = originalUrl;
+            await new Promise(resolve => img.onload = resolve);
+
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = img.width;
+            canvas.height = img.height;
+            ctx.drawImage(img, 0, 0);
+
+            // Compress image
+            const compressedUrl = canvas.toDataURL('image/jpeg', quality);
+            compressedPreview.src = compressedUrl;
+
+            // Calculate compressed size
+            const compressedBlob = await fetch(compressedUrl).then(res => res.blob());
+            compressedSize.textContent = `Size: ${(compressedBlob.size / 1024).toFixed(2)} KB`;
+
+            // Set download link
+            downloadLink.href = compressedUrl;
+
+            // Show results with animation
+            resultSection.classList.remove('hidden');
+            setTimeout(() => resultSection.classList.add('show'), 50);
+
+            // Reset button
+            compressButton.disabled = false;
+            compressButton.textContent = 'Compress Image';
+            compressButton.classList.remove('loading');
+        });
+    </script>
